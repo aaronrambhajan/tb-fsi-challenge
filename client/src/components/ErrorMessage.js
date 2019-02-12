@@ -11,7 +11,7 @@ export default class ErrorMessage extends React.Component {
 
   render = () => {
     return (
-      <div style={{ height: 50, padding: 10 }}>
+      <div className="error" style={{ height: 50, padding: 10 }}>
         <div
           style={{
             display: this.props.show ? 'inherit' : 'none',

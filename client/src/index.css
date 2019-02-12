@@ -1,8 +1,8 @@
-body {
+html {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-  line-height: 1;
+  font-family: 'Helvetica', sans-serif;
+  line-height: 1.5;
   font-size: 17px;
 }
 
@@ -19,10 +19,23 @@ body {
   align-items: center;
 }
 
-.home h1 {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+.home .user-input {
+  padding: 0 1em 0 1em;
+}
+
+.home .answer {
   text-align: center;
+  font-size: 5em;
+  font-weight: 600;
+  padding: 1em;
+}
+
+.home h1 {
+  text-align: center;
+  font-weight: 100;
+  font-size: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .home form {
@@ -30,19 +43,26 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1em;
 }
 
-.home .user-input {
-  height: 50vh;
-  width: 100vw;
+.home input {
+  height: 100%;
+  width: 100%;
+  font-size: 3em;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
-.home .answer {
-  height: 50vh;
-  width: 100vw;
-  text-align: center;
-  font-size: 500%;
-  color: rebeccapurple;
-  font-weight: 600;
+@media (max-width: 540px) {
+  .home h1 {
+    font-size: 1.5em;
+  }
+
+  .home input {
+    font-size: 2em;
+  }
+
+  .home .answer {
+    font-size: 3em;
+  }
 }

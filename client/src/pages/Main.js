@@ -1,50 +1,73 @@
 // @flow
 
 import React from 'react';
-import { Input, Button, Row, Col } from 'reactstrap';
+import { Input, Button } from 'reactstrap';
 import ErrorMessage from '../components/ErrorMessage';
 
 export default class Main extends React.Component {
   state: {
-    value: string,
+    submitValue: string,
+    apiAnswer: Number,
+    showErrorMsg: boolean,
   };
 
   state = {
-    value: '',
-    answer: null,
-    showWrong: false,
+    submitValue: '',
+    apiAnswer: null,
+    showErrorMsg: false,
   };
 
-  handleSubmit = async (e) => {
-    // Stop the default action
-    e.preventDefault();
+  /**
+   * POSTs user-inputted text to be calculated.
+   *
+   * @param {SyntheticEvent} event
+   *    DOM event handler
+   */
+  handleSubmit = async (event) => {
+    // Stop the default refresh
+    event.preventDefault();
+
+    // Block empty submissions
+    if (this.state.submitValue === '') {
+      this.setState({ showErrorMsg: true });
+      return;
+    }
 
     // Make the request
-    await fetch('/api/get-nums', {
+    await fetch('/api/v1/get_nums', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ value: this.state.value }),
+      body: JSON.stringify({ value: this.state.submitValue }),
     })
       .then((response) => response.json())
-      .then((res) => this.setState({ answer: JSON.stringify(res) }))
+      .then((res) => this.setState({ apiAnswer: JSON.stringify(res) }))
       .catch((error) => {
         console.error('Error: ', error);
       });
   };
 
+  /**
+   * Updates the contents of the form input.
+   *
+   * @param {SyntheticEvent} event
+   *    DOM event handler
+   */
   handleChange = (event) => {
-    // Simple input validation—only #s
+    // Validate input (only numerical)
     var reg = new RegExp('^[0-9]*$');
     if (!reg.test(event.target.value)) {
-      this.setState({ showWrong: true });
+      this.setState({ showErrorMsg: true });
     } else {
-      this.setState({ value: event.target.value, showWrong: false });
+      this.setState({
+        submitValue: event.target.value,
+        showErrorMsg: false,
+      });
     }
   };
 
-  render() {
+  render = () => {
     return (
       <div className="home">
         <div className="user-input">
@@ -55,16 +78,12 @@ export default class Main extends React.Component {
                 <Input
                   type="text"
                   placeholder="Enter a number..."
-                  style={{
-                    fontSize: '50px',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  value={this.state.value}
+                  value={this.state.submitValue}
                   onChange={(e) => this.handleChange(e)}
                 />
               </label>
-              <ErrorMessage show={this.state.showWrong} />
+
+              <ErrorMessage show={this.state.showErrorMsg} />
 
               <Button type="submit" color="primary" value="Submit">
                 Submit
@@ -73,9 +92,9 @@ export default class Main extends React.Component {
           </div>
         </div>
         <div className="answer">
-          <p>{this.state.answer}</p>
+          <p>{this.state.apiAnswer}</p>
         </div>
       </div>
     );
-  }
+  };
 }

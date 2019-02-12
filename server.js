@@ -16,7 +16,7 @@ app.use(logger('dev'));
 // For production, serve static files from React App
 app.use(express.static(path.join(__dirname, '/client/build')));
 
-app.post('/api/get-nums', (req, res) => {
+app.post('/api/v1/get_nums', (req, res) => {
   const result = getMedianPrimeNumbers(req.body.value);
   res.send(result);
 });
