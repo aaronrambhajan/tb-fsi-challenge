@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Input, Button } from 'reactstrap';
+import { fetchAnswer } from './index';
 import ErrorMessage from '../components/ErrorMessage';
 
 export default class Main extends React.Component {
@@ -33,19 +34,9 @@ export default class Main extends React.Component {
       return;
     }
 
-    // Make the request
-    await fetch('/api/v1/get_nums', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ value: this.state.submitValue }),
-    })
-      .then((response) => response.json())
-      .then((res) => this.setState({ apiAnswer: JSON.stringify(res) }))
-      .catch((error) => {
-        console.error('Error: ', error);
-      });
+    // Make the request and update with answer!
+    const ans = await fetchAnswer(this.state.submitValue);
+    this.setState({ apiAnswer: JSON.stringify(ans) });
   };
 
   /**
@@ -58,8 +49,10 @@ export default class Main extends React.Component {
     // Validate input (only numerical)
     var reg = new RegExp('^[0-9]*$');
     if (!reg.test(event.target.value)) {
+      // If invalid, block from being entered and display error
       this.setState({ showErrorMsg: true });
     } else {
+      // Otherwise, disable the error and update the input box
       this.setState({
         submitValue: event.target.value,
         showErrorMsg: false,
@@ -83,7 +76,7 @@ export default class Main extends React.Component {
                 />
               </label>
 
-              <ErrorMessage show={this.state.showErrorMsg} />
+              <ErrorMessage display={this.state.showErrorMsg} />
 
               <Button type="submit" color="primary" value="Submit">
                 Submit
