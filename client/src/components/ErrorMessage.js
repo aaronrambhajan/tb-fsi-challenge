@@ -1,5 +1,9 @@
 // @flow
 
+/**
+ * Display component that appears when a user enters invalid input.
+ */
+
 import React from 'react';
 import { Row } from 'reactstrap';
 import errorMark from '../images/error-mark.svg';
