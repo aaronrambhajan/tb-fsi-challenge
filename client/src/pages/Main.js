@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { Input, Button } from 'reactstrap';
+import { fetchNums } from '../api';
 import ErrorMessage from '../components/ErrorMessage';
 import Answer from '../components/Answer';
 import PrimeInput from '../components/PrimeInput';
@@ -40,18 +41,8 @@ export default class Main extends React.Component {
     }
 
     // Make the request + update with an answer!
-    await fetch('/api/v1/get_nums', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ value: this.state.submitValue }),
-    })
-      .then((response) => response.json())
-      .then((res) => this.setState({ apiAnswer: JSON.stringify(res) }))
-      .catch((error) => {
-        console.error('Error: ', error);
-      });
+    const ans = await fetchNums(this.state.submitValue);
+    this.setState({ apiAnswer: JSON.stringify(ans) });
   };
 
   /**
