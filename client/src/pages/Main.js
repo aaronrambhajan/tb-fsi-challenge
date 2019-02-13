@@ -1,9 +1,14 @@
 // @flow
 
+/**
+ * Main container for all front-end interactions.
+ */
+
 import React from 'react';
 import { Input, Button } from 'reactstrap';
-import { fetchAnswer } from './index';
 import ErrorMessage from '../components/ErrorMessage';
+import Answer from '../components/Answer';
+import PrimeInput from '../components/PrimeInput';
 
 export default class Main extends React.Component {
   state: {
@@ -19,7 +24,7 @@ export default class Main extends React.Component {
   };
 
   /**
-   * POSTs user-inputted text to be calculated.
+   * POSTs user-inputted text for calculation..
    *
    * @param {SyntheticEvent} event
    *    DOM event handler
@@ -34,9 +39,19 @@ export default class Main extends React.Component {
       return;
     }
 
-    // Make the request and update with answer!
-    const ans = await fetchAnswer(this.state.submitValue);
-    this.setState({ apiAnswer: JSON.stringify(ans) });
+    // Make the request + update with an answer!
+    await fetch('/api/v1/get_nums', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ value: this.state.submitValue }),
+    })
+      .then((response) => response.json())
+      .then((res) => this.setState({ apiAnswer: JSON.stringify(res) }))
+      .catch((error) => {
+        console.error('Error: ', error);
+      });
   };
 
   /**
@@ -49,10 +64,10 @@ export default class Main extends React.Component {
     // Validate input (only numerical)
     var reg = new RegExp('^[0-9]*$');
     if (!reg.test(event.target.value)) {
-      // If invalid, block from being entered and display error
+      // Block from being entered and display error
       this.setState({ showErrorMsg: true });
     } else {
-      // Otherwise, disable the error and update the input box
+      // Disable the error and update the input box
       this.setState({
         submitValue: event.target.value,
         showErrorMsg: false,
@@ -63,30 +78,23 @@ export default class Main extends React.Component {
   render = () => {
     return (
       <div className="home">
+        <h1>Median Prime Numbers</h1>
+
+        {/* All user input */}
         <div className="user-input">
-          <h1>Median Prime Numbers</h1>
-          <div>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                <Input
-                  type="text"
-                  placeholder="Enter a number..."
-                  value={this.state.submitValue}
-                  onChange={(e) => this.handleChange(e)}
-                />
-              </label>
-
-              <ErrorMessage display={this.state.showErrorMsg} />
-
-              <Button type="submit" color="primary" value="Submit">
-                Submit
-              </Button>
-            </form>
-          </div>
+          <form onSubmit={this.handleSubmit}>
+            <PrimeInput
+              value={this.state.submitValue}
+              handleChange={this.handleChange}
+            />
+            <ErrorMessage display={this.state.showErrorMsg} />
+            <Button type="submit" color="primary" value="Submit">
+              Submit
+            </Button>
+          </form>
         </div>
-        <div className="answer">
-          <p>{this.state.apiAnswer}</p>
-        </div>
+
+        <Answer text={this.state.apiAnswer} />
       </div>
     );
   };
