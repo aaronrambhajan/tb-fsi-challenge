@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import path from 'path';
-import getMedianPrimeNumbers from './api/calculatePrimes';
+import calculatePrimes from './calculatePrimes';
 
 const app = express();
 const API_PORT = process.env.PORT || 5000;
@@ -17,7 +17,7 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, '/client/build')));
 
 app.post('/api/v1/get_nums', (req, res) => {
-  const result = getMedianPrimeNumbers(req.body.value);
+  const result = calculatePrimes(req.body.value);
   res.send(result);
 });
 
