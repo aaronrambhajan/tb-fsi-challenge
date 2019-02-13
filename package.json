@@ -6,8 +6,8 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon api/server.js --exec babel-node --presets es2015,stage-0",
-    "client": "cd client && npm start",
-    "test": "jest"
+    "test": "jest",
+    "client": "cd client && npm start"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,6 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "babel-jest": "^24.1.0",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.9.1",
-    "enzyme-to-json": "^3.3.5",
     "eslint-plugin-prettier": "^2.6.2",
     "flow-bin": "^0.80.0",
     "jest": "^24.1.0",
@@ -39,7 +36,11 @@
     "concurrently": "^4.0.1",
     "express": "^4.16.3",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.4",
-    "underscore": "^1.9.1"
+    "nodemon": "^1.18.4"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/client/"
+    ]
   }
 }
