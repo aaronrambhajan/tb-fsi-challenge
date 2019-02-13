@@ -1,3 +1,9 @@
+// @flow
+
+/**
+ * Tests for the calculatePrimes function.
+ */
+
 import calculatePrimes from '../api/calculatePrimes';
 
 test('Calculates primes for 10 to equal [3, 5]', () => {

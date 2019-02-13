@@ -15,7 +15,7 @@ export default function getMedianPrimeNums(num) {
   const midPoint = Math.floor(size / 2);
 
   if (size % 2 === 0) {
-    // They don't seem to want the actual median, but both values
+    // Examples suggest they want both median values in the case of 2
     return [sieveNums[midPoint - 1], sieveNums[midPoint]];
   }
 
@@ -33,14 +33,20 @@ export default function getMedianPrimeNums(num) {
  *   All prime numbers less than the target.
  */
 function sieveOfEratosthenes(target) {
+  // Will eventually be marked `false` iff !prime
   const primes = [];
   for (var primeIndex = 0; primeIndex < target + 1; primeIndex++) {
     primes.push(true);
   }
 
+  // Starting at the first prime...
   let primeNum = 2;
+
   while (primeNum * primeNum <= target) {
+    // We change every square each time, so by the time we run through, we
+    // know if it's still `true`, then it's a prime
     if (primes[primeNum]) {
+      // Update all multiples
       for (
         var pMultiple = primeNum * primeNum;
         pMultiple < target + 1;
@@ -52,6 +58,7 @@ function sieveOfEratosthenes(target) {
     primeNum += 1;
   }
 
+  // Create results
   const results = [];
   for (var counter = 2; counter < target; counter++) {
     if (primes[counter]) {
